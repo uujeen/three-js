@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-// ex02와 차이점: 배경의 색, 투명도 설정
+// ex04와 차이점: 애니메이션 성능 보정 방법 1
 export default function examle() {
     const canvas = document.querySelector('#three-canvas');
     // const renderer = new THREE.WebGLRenderer({ canvas: canvas }); // 속성과 값이 같기 때문에 아래와 같이 쓸 수 있다.
@@ -65,14 +65,18 @@ export default function examle() {
     });
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
+
     // 그리기
+    const clock = new THREE.Clock();
     function draw() {
+        const time = clock.getElapsedTime();
         // 각도는 Radian을 사용
         // 360도는 2파이 3.14
         // mesh.rotation.y += 0.1;
         // MathUtils.degToRad(1) 1도씩 회전
-        mesh.rotation.y += THREE.MathUtils.degToRad(1);
-        mesh.position.y += 0.01;
+        // mesh.rotation.y += THREE.MathUtils.degToRad(1);
+        mesh.rotation.y = time;
+        mesh.position.y = time;
         if (mesh.position.y > 3) {
             mesh.position.y = 0;
         }

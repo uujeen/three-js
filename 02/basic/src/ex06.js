@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-// ex03와 차이점: 광원 설정
+// ex05와 차이점: 애니메이션 성능 보정 방법 2
 export default function examle() {
     const canvas = document.querySelector('#three-canvas');
     // const renderer = new THREE.WebGLRenderer({ canvas: canvas }); // 속성과 값이 같기 때문에 아래와 같이 쓸 수 있다.
@@ -33,8 +33,6 @@ export default function examle() {
         1000
     );
     // Camera
-    camera.position.x = 2;
-    camera.position.y = 2;
     camera.position.z = 5;
     scene.add(camera);
 
@@ -67,8 +65,26 @@ export default function examle() {
     });
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
-    // rendering을 해주어야 보인다.
-    renderer.render(scene, camera);
+
+    // 그리기
+    const clock = new THREE.Clock();
+    function draw() {
+        const delta = clock.getDelta(); // draw가 실행될 때마다 시간차이
+        // 각도는 Radian을 사용
+        // 360도는 2파이 3.14
+        // mesh.rotation.y += 0.1;
+        // MathUtils.degToRad(1) 1도씩 회전
+        // mesh.rotation.y += THREE.MathUtils.degToRad(1);
+        mesh.rotation.y += 2 * delta;
+        mesh.position.y += delta;
+        if (mesh.position.y > 3) {
+            mesh.position.y = 0;
+        }
+        renderer.render(scene, camera);
+
+        // window.requestAnimationFrame(draw);
+        renderer.setAnimationLoop(draw);
+    }
 
     // 화면의 크기가 변할때마다 보이는 화면 자동 변환 렌더링 시키기
     function setSize() {
@@ -78,6 +94,7 @@ export default function examle() {
         renderer.render(scene, camera);
     }
     // 이벤트
-
     window.addEventListener('resize', setSize);
+
+    draw();
 }
