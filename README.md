@@ -4,7 +4,7 @@
 
 > WebGL을 손쉽게 사용할 수 있게하는 자바스크립트 라이브러리
 
-# JS의 module 사용
+### JS의 module 사용
 
 > 모듈을 사용해서 개발하길 지향한다
 
@@ -46,7 +46,7 @@ hello.hello2();
 // hello3();
 ```
 
-# Webpack
+### Webpack
 
 > bundling
 
@@ -55,16 +55,16 @@ js, css를 하나의 모듈로 보고 배포하고 포장하는 작업 - bundlin
 
 ## Section02
 
-> Scene
+### Scene
 
 기본이 되는 무대, 장면
 설정을 하지 않았을 경우 (0, 0, 0)으로 설정
 
-> Mesh
+### Mesh
 
 Mesh = Geometry(모양) + Material(재질)
 
-> Camera
+### Camera
 
 Field of view(시야각), 어느 정도 시야로 보여줄 것인가. 어떤 각도로, 얼마나
 
@@ -95,11 +95,11 @@ bottom — 카메라 절두체 하평면.
 near — 카메라 절두체 근평면.
 far — 카메라 절두체 원평면.
 
-> Light
+### Light
 
 필수 요소는 아님 Material에 따라 사용 여부 결정.
 
-> Renderer
+### Renderer
 
 카메라가 보여주는 장면
 
@@ -113,6 +113,6 @@ const renderer = new THREE.WebGLRenderer({
 
 antialias: 부드럽게 해주는 대신 성능저하의 가능성이 있다.
 
-> 3D 위치
+### 3D 위치
 
 x축 : 좌우 이동, y축 : 위아래 이동, z축 : 앞뒤 이동
