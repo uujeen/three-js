@@ -5,6 +5,7 @@
 // import examle from './ex05';
 // import examle from './ex06';
 // import examle from './ex06_02';
-import examle from './ex07';
+// import examle from './ex07';
+import examle from './ex08';
 
 examle();
