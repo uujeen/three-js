@@ -46,7 +46,7 @@ hello.hello2();
 // hello3();
 ```
 
-# Webpac
+# Webpack
 
 > bundling
 
