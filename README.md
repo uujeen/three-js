@@ -1,8 +1,8 @@
 # Three.js
 
-## Section 01
-
 > WebGL을 손쉽게 사용할 수 있게하는 자바스크립트 라이브러리
+
+## Section 01
 
 ### JS의 module 사용
 
