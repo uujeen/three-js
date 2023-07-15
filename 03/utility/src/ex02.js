@@ -44,7 +44,7 @@ export default function example() {
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
-    // Stats
+    // Stats 초당 프레임 계산, 실제 성능을 테스트 할 수 있다. 프레임이 떨어진다면 성능이 저하된다는 뜻.
     const stats = new Stats();
     document.body.append(stats.domElement);
 
