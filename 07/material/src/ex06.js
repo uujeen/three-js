@@ -5,22 +5,37 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 export default function example() {
     // 텍스트 이미지 로더
-    const textureLoader = new THREE.TextureLoader();
-    // const texture = textureLoader.load(
-    //     '/textures/brick/Brick_Wall_019_ambientOcclusion.jpg'
-    // );
-    const texture = textureLoader.load(
-        '/textures/brick/Brick_Wall_019_basecolor.jpg',
-        () => {
-            console.log('로드 완료!');
-        },
-        () => {
-            console.log('로드 중!');
-        },
-        () => {
-            console.log('로드 에러!');
-        }
+    const loadingManager = new THREE.LoadingManager();
+    loadingManager.onStart = () => {
+        console.log('로드 시작');
+    };
+    loadingManager.onProgress = (img) => {
+        console.log(img + '로드');
+    };
+    loadingManager.onLoad = () => {
+        console.log('로드 완료');
+    };
+    loadingManager.onError = () => {
+        console.log('에러');
+    };
+
+    const textureLoader = new THREE.TextureLoader(loadingManager);
+    const baseColorTex = textureLoader.load(
+        '/textures/brick/Brick_Wall_019_basecolor.jpg'
     );
+    const ambientTex = textureLoader.load(
+        '/textures/brick/Brick_Wall_019_ambientOcclusion.jpg'
+    );
+    const heightTex = textureLoader.load(
+        '/textures/brick/Brick_Wall_019_height.png'
+    );
+    const normalText = textureLoader.load(
+        '/textures/brick/Brick_Wall_019_normal.jpg'
+    );
+    const roughnessTex = textureLoader.load(
+        '/textures/brick/Brick_Wall_019_roughness.jpg'
+    );
+
     // Renderer
     const canvas = document.querySelector('#three-canvas');
     const renderer = new THREE.WebGLRenderer({
@@ -57,7 +72,7 @@ export default function example() {
     const geometry = new THREE.BoxGeometry(2, 2, 2);
     const material = new THREE.MeshBasicMaterial({
         // color: 'orangered',
-        map: texture,
+        map: baseColorTex,
     });
 
     const mesh = new THREE.Mesh(geometry, material);
