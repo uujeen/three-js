@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { radToDeg } from 'three/src/math/MathUtils';
 // ----- 주제: Geometry 정점(Vertex) position 이용하기
 
 export default function example() {
@@ -59,8 +60,13 @@ export default function example() {
     const clock = new THREE.Clock();
 
     function draw() {
+        const time = clock.getElapsedTime();
         const delta = clock.getDelta();
 
+        for (let i = 0; i < positionArray.length; i += 3) {
+            positionArray[i] += Math.sin(time) * 0.002;
+        }
+        geometry.attributes.position.needsUpdate = true;
         renderer.render(scene, camera);
         renderer.setAnimationLoop(draw);
     }
