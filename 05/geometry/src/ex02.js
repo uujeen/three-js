@@ -49,11 +49,16 @@ export default function example() {
 
     // console.log(geometry.attributes.position.array);
     const positionArray = geometry.attributes.position.array;
+    const randomArray = [];
     for (let i = 0; i < positionArray.length; i += 3) {
         // 정점(vertex) 한 개의 x, y, z 좌표를 랜덤으로 조정
         positionArray[i] += (Math.random() - 0.5) * 0.2;
         positionArray[i + 1] += (Math.random() - 0.5) * 0.2;
         positionArray[i + 2] += (Math.random() - 0.5) * 0.2;
+
+        randomArray[i] = (Math.random() - 0.5) * 0.2;
+        randomArray[i + 1] = (Math.random() - 0.5) * 0.2;
+        randomArray[i + 2] = (Math.random() - 0.5) * 0.2;
     }
 
     // 그리기
@@ -64,7 +69,11 @@ export default function example() {
         const delta = clock.getDelta();
 
         for (let i = 0; i < positionArray.length; i += 3) {
-            positionArray[i] += Math.sin(time) * 0.002;
+            positionArray[i] += Math.sin(time + randomArray[i] * 100) * 0.001;
+            positionArray[i + 1] +=
+                Math.sin(time + randomArray[i] * 100) * 0.001;
+            positionArray[i + 2] +=
+                Math.sin(time + randomArray[i] * 100) * 0.001;
         }
         geometry.attributes.position.needsUpdate = true;
         renderer.render(scene, camera);
