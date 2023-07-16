@@ -7,7 +7,7 @@ export default function example() {
     // 텍스트 이미지 로드
     const cubeTextureLoader = new THREE.CubeTextureLoader();
     const cubeTexture = cubeTextureLoader
-        .setPath('/textures/cubemap/')
+        .setPath('/textures/tooncubemap/')
         .load(['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']);
     // Renderer
     const canvas = document.querySelector('#three-canvas');

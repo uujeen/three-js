@@ -75,7 +75,7 @@ export default function example() {
         // color: 'skyblue',
         map: baseColorTex,
         roughness: 0.3,
-        metalness: 0.3,
+        metalness: 0.1,
         normalMap: normalText,
         roughnessMap: roughnessTex,
         aoMap: ambientTex,
