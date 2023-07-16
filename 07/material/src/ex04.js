@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
-// ----- 주제: MeshPhongMaterial, MeshStandardMaterial
+// ----- 주제: 각지게 표현하기
 
 export default function example() {
     // Renderer
@@ -43,6 +43,7 @@ export default function example() {
     const material1 = new THREE.MeshPhongMaterial({
         color: 'orangered',
         shininess: 1000,
+        flatShading: true,
     });
     // MeshStandardMaterial 하이라이트 가능, 하지만 재질을 더 수정하여 표현 가능
     const material2 = new THREE.MeshStandardMaterial({
