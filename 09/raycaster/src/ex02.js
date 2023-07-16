@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
-// ----- 주제: 특정 방향의 광선(Ray)에 맞은 Mesh 판별하기
+// ----- 주제: 클릭한 Mesh 선택하기
 
 export default function example() {
     // Renderer
@@ -42,13 +42,6 @@ export default function example() {
     // Controls
 
     // Mesh
-    const lineMaterial = new THREE.LineBasicMaterial({ color: 'yellow' });
-    const points = [];
-    points.push(new THREE.Vector3(0, 0, 100));
-    points.push(new THREE.Vector3(0, 0, -100));
-    const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-    const guide = new THREE.Line(lineGeometry, lineMaterial);
-    scene.add(guide);
 
     const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
     const boxMaterial = new THREE.MeshStandardMaterial({ color: 'plum' });
@@ -65,6 +58,7 @@ export default function example() {
     const meshes = [boxMesh, torusMesh];
 
     const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
 
     // 그리기
     const clock = new THREE.Clock();
@@ -78,20 +72,21 @@ export default function example() {
         boxMesh.material.color.set('plum');
         torusMesh.material.color.set('lime');
 
-        const origin = new THREE.Vector3(0, 0, 100);
-        const direction = new THREE.Vector3(0, 0, -100);
-        direction.normalize(); // 정교화 벡터의 방향을 1로 단순화함.
-        raycaster.set(origin, direction);
-
-        // console.log(raycaster.intersectObjects(meshes));
-        const intersects = raycaster.intersectObjects(meshes);
-        intersects.forEach((item) => {
-            console.log(item.object.name);
-            item.object.material.color.set('red');
-        });
-
         renderer.render(scene, camera);
         renderer.setAnimationLoop(draw);
+    }
+
+    function checkIntersects() {
+        raycaster.setFromCamera(mouse, camera);
+
+        const intersects = raycaster.intersectObjects(meshes);
+        for (const item of intersects) {
+            console.log(item.object.name);
+            break;
+        }
+        // if (intersects[0]) {
+        //     console.log(intersects[0].object.name);
+        // }
     }
 
     function setSize() {
@@ -103,6 +98,12 @@ export default function example() {
 
     // 이벤트
     window.addEventListener('resize', setSize);
+    canvas.addEventListener('click', (e) => {
+        mouse.x = (e.clientX / canvas.clientWidth) * 2 - 1;
+        mouse.y = -((e.clientY / canvas.clientHeight) * 2 - 1);
+        // console.log(mouse);
+        checkIntersects();
+    });
 
     draw();
 }
