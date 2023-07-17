@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { ImagePanel } from './ImagePanel';
+import gsap from 'gsap';
 
 // ----- 주제: 형태가 바뀌는 이미지 패널
 
@@ -41,29 +43,33 @@ export default function example() {
     controls.enableDamping = true;
 
     // Mesh
-    const planeMesh = new THREE.Mesh(
-        new THREE.PlaneGeometry(0.3, 0.3),
-        new THREE.MeshBasicMaterial({
-            color: 'red',
-            side: THREE.DoubleSide,
-        })
-    );
+    const planeGeometry = new THREE.PlaneGeometry(0.3, 0.3);
+
+    const textureLoader = new THREE.TextureLoader();
 
     // Points
     const sphereGeometry = new THREE.SphereGeometry(1, 8, 8);
-    const positionArray = sphereGeometry.attributes.position.array;
+    const spherePositionArray = sphereGeometry.attributes.position.array;
+    const randomPositionArray = [];
+    for (let i = 0; i < spherePositionArray.length; i++) {
+        randomPositionArray.push((Math.random() - 0.5) * 10);
+    }
 
     // 여러개의 Plane Mesh 생성
-    let plane;
-    for (let i = 0; i < positionArray.length; i += 3) {
-        plane = planeMesh.clone();
-        plane.position.x = positionArray[i];
-        plane.position.y = positionArray[i + 1];
-        plane.position.z = positionArray[i + 2];
+    const imagePanels = [];
+    let imagePanel;
+    for (let i = 0; i < spherePositionArray.length; i += 3) {
+        imagePanel = new ImagePanel({
+            textureLoader,
+            scene,
+            geometry: planeGeometry,
+            imageSrc: `/images/0${Math.ceil(Math.random() * 5)}.jpg`,
+            x: spherePositionArray[i],
+            y: spherePositionArray[i + 1],
+            z: spherePositionArray[i + 2],
+        });
 
-        plane.lookAt(0, 0, 0);
-
-        scene.add(plane);
+        imagePanels.push(imagePanel);
     }
 
     // 그리기
@@ -85,7 +91,67 @@ export default function example() {
         renderer.render(scene, camera);
     }
 
+    function setShape(e) {
+        const type = e.target.dataset.type;
+        let array;
+        switch (type) {
+            case 'random':
+                array = randomPositionArray;
+                break;
+            case 'sphere':
+                array = spherePositionArray;
+                break;
+        }
+
+        // 위치이동
+        for (let i = 0; i < imagePanels.length; i++) {
+            gsap.to(imagePanels[i].mesh.position, {
+                duration: 2,
+                // imagePanels
+                x: array[i * 3],
+                y: array[i * 3 + 1],
+                z: array[i * 3 + 2],
+            });
+
+            // 회전
+            if (type === 'random') {
+                gsap.to(imagePanels[i].mesh.rotation, {
+                    duration: 2,
+                    x: 0,
+                    y: 0,
+                    z: 0,
+                });
+            } else if (type === 'sphere') {
+                gsap.to(imagePanels[i].mesh.rotation, {
+                    duration: 2,
+                    x: imagePanels[i].sphereRotationX,
+                    y: imagePanels[i].sphereRotationY,
+                    z: imagePanels[i].sphereRotationZ,
+                });
+            }
+        }
+    }
+
+    // 버튼
+    const btnWarpper = document.createElement('div');
+    btnWarpper.classList.add('btns');
+
+    const randomBtn = document.createElement('button');
+    randomBtn.dataset.type = 'random'; // data-type = 'random' 형식으로 값이 들어감
+    randomBtn.style.cssText = 'position: absolute; left: 20px; top: 20px;';
+    randomBtn.innerHTML = 'Random';
+    btnWarpper.append(randomBtn);
+
+    const sphereBtn = document.createElement('button');
+    sphereBtn.dataset.type = 'sphere'; // data-type = 'random' 형식으로 값이 들어감
+    sphereBtn.style.cssText = 'position: absolute; left: 20px; top: 50px;';
+    sphereBtn.innerHTML = 'Sphere';
+    btnWarpper.append(sphereBtn);
+
+    document.body.append(btnWarpper);
+
     // 이벤트
+    btnWarpper.addEventListener('click', setShape);
     window.addEventListener('resize', setSize);
 
     draw();
